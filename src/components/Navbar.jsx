@@ -70,8 +70,8 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="bg-white border-t border-gray-200 relative">
-      <div className="max-w-[1000px] mx-auto">
+    <div className="relative z-50 bg-white border-t border-gray-200">
+      <div className="max-w-[1000px] mx-auto relative">
         <ul className="flex justify-center gap-8 py-3 text-[11px] font-bold">
 
           {menu.map((item, index) => (
@@ -86,60 +86,47 @@ const Navbar = () => {
             >
               <div className="cursor-pointer hover:text-yellow-600 transition">
                 {item.name}
-                {item.dropdown && <span className="ml-1 text-xs">▼</span>}
+                {item.dropdown && <span className="ml-1 text-[10px]">▼</span>}
               </div>
 
               {/* LEVEL 1 DROPDOWN */}
-              {item.dropdown && (
-                <div
-                  className={`absolute left-0 top-full mt-0 w-56 bg-[#d8c7a3] shadow-xl
-                  transition-all duration-200
-                  ${
-                    active === index
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
-                  }`}
-                >
+              {item.dropdown && active === index && (
+                <div className="absolute left-0 top-full w-56 bg-[#d8c7a3] shadow-2xl z-[9999]">
+
                   {item.dropdown.map((subItem, i) => {
-                    // Simple string dropdown
+
+                    // SIMPLE DROPDOWN
                     if (typeof subItem === "string") {
                       return (
                         <div
                           key={i}
-                          className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] transition"
+                          className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] cursor-pointer"
                         >
                           {subItem}
                         </div>
                       );
                     }
 
-                    // Object with submenu
+                    // DROPDOWN WITH SUBMENU
                     return (
                       <div
                         key={i}
                         className="relative"
                         onMouseEnter={() => setSubActive(i)}
+                        onMouseLeave={() => setSubActive(null)}
                       >
-                        <div className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] flex justify-between items-center transition">
+                        <div className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] flex justify-between items-center cursor-pointer">
                           {subItem.name}
                           {subItem.sub && <span>›</span>}
                         </div>
 
                         {/* LEVEL 2 DROPDOWN */}
-                        {subItem.sub && (
-                          <div
-                            className={`absolute top-0 left-full w-60 bg-[#d8c7a3] shadow-xl
-                            transition-all duration-200
-                            ${
-                              subActive === i
-                                ? "opacity-100 translate-x-0"
-                                : "opacity-0 -translate-x-2 pointer-events-none"
-                            }`}
-                          >
+                        {subItem.sub && subActive === i && (
+                          <div className="absolute top-0 left-full w-60 bg-[#d8c7a3] shadow-2xl z-[9999]">
                             {subItem.sub.map((child, j) => (
                               <div
                                 key={j}
-                                className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] transition"
+                                className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] cursor-pointer"
                               >
                                 {child}
                               </div>
@@ -149,6 +136,7 @@ const Navbar = () => {
                       </div>
                     );
                   })}
+
                 </div>
               )}
             </li>
