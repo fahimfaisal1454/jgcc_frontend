@@ -5,6 +5,11 @@ const Navbar = () => {
   const [active, setActive] = useState(null);
   const [subActive, setSubActive] = useState(null);
 
+  const closeMenu = () => {
+    setActive(null);
+    setSubActive(null);
+  };
+
   const menu = [
     { name: "Home", path: "/" },
 
@@ -22,19 +27,19 @@ const Navbar = () => {
     {
       name: "About Us",
       dropdown: [
-        { name: "History of the College" },
-        { name: "The College at a Glance" },
-        { name: "Citizen Charter" },
+        { name: "History of the College", path: "/about/history" },
+        { name: "The College at a Glance", path: "/about/at-a-glance" },
+        { name: "Citizen Charter", path: "/about/citizen-charter" },
       ],
     },
 
     {
       name: "Academic",
       dropdown: [
-        { name: "HSC" },
-        { name: "Degree (Pass)" },
-        { name: "Honours" },
-        { name: "Master’s" },
+        { name: "HSC", path: "/academic/hsc" },
+        { name: "Degree (Pass)", path: "/academic/degree" },
+        { name: "Honours", path: "/academic/honours" },
+        { name: "Master’s", path: "/academic/masters" },
       ],
     },
 
@@ -44,50 +49,58 @@ const Navbar = () => {
         {
           name: "Science",
           sub: [
-            { name: "Department of Physics" },
-            { name: "Department of Chemistry" },
-            { name: "Department of Mathematics" },
-            { name: "Department of Botany" },
-            { name: "Department of Zoology" },
+            { name: "Department of Physics", path: "/departments/science/physics" },
+            { name: "Department of Chemistry", path: "/departments/science/chemistry" },
+            { name: "Department of Mathematics", path: "/departments/science/mathematics" },
+            { name: "Department of Botany", path: "/departments/science/botany" },
+            { name: "Department of Zoology", path: "/departments/science/zoology" },
           ],
         },
         {
           name: "Business Studies",
           sub: [
-            { name: "Department of Accounting" },
-            { name: "Department of Management" },
+            { name: "Department of Accounting", path: "/departments/business/accounting" },
+            { name: "Department of Management", path: "/departments/business/management" },
           ],
         },
         {
           name: "Arts",
           sub: [
-            { name: "Department of Bangla" },
-            { name: "Department of English" },
+            { name: "Department of Bangla", path: "/departments/arts/bangla" },
+            { name: "Department of English", path: "/departments/arts/english" },
           ],
         },
         {
           name: "Social Science",
           sub: [
-            { name: "Department of Economics" },
-            { name: "Department of Sociology" },
+            { name: "Department of Economics", path: "/departments/social/economics" },
+            { name: "Department of Sociology", path: "/departments/social/sociology" },
           ],
         },
-        { name: "ICT" },
+        {
+          name: "ICT",
+          sub: [
+            { name: "Department of ICT", path: "/departments/ict/ict" },
+          ],
+        },
       ],
     },
-
-    { name: "XI Admission" },
 
     {
-      name: "Notices",
-      dropdown: [
-        { name: "General Notice" },
-        { name: "Office Orders" },
-      ],
-    },
+  name: "XI Admission",
+  external: true,
+  path: "https://admission.studentsheba.com/login",
+},
+{
+  name: "Notices",
+  dropdown: [
+    { name: "General Notice", path: "/notices/general" },
+    { name: "Office Orders", path: "/notices/office-orders" },
+  ],
+},
 
-    { name: "Writer’s Corner" },
-    { name: "Contact Us" },
+    { name: "Writer’s Corner", path: "/writers-corner" },
+    { name: "Contact Us", path: "/contact" },
 
     {
       name: "Online Fees",
@@ -107,15 +120,13 @@ const Navbar = () => {
               key={index}
               className="relative"
               onMouseEnter={() => setActive(index)}
-              onMouseLeave={() => {
-                setActive(null);
-                setSubActive(null);
-              }}
+              onMouseLeave={() => closeMenu()}
             >
               {/* TOP LEVEL */}
               {item.path ? (
                 <Link
                   to={item.path}
+                  onClick={closeMenu}
                   className="hover:text-yellow-600 transition"
                 >
                   {item.name}
@@ -123,9 +134,7 @@ const Navbar = () => {
               ) : (
                 <div className="cursor-pointer hover:text-yellow-600 transition">
                   {item.name}
-                  {item.dropdown && (
-                    <span className="ml-1 text-[10px]">▼</span>
-                  )}
+                  {item.dropdown && <span className="ml-1 text-[10px]">▼</span>}
                 </div>
               )}
 
@@ -139,6 +148,7 @@ const Navbar = () => {
                         <Link
                           key={i}
                           to={subItem.path}
+                          onClick={closeMenu}
                           className="block px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f]"
                         >
                           {subItem.name}
@@ -146,7 +156,7 @@ const Navbar = () => {
                       ) : (
                         <div
                           key={i}
-                          className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] cursor-pointer"
+                          className="px-4 py-3 border-b border-[#cbb98f]"
                         >
                           {subItem.name}
                         </div>
@@ -169,14 +179,25 @@ const Navbar = () => {
                         {/* LEVEL 2 DROPDOWN */}
                         {subActive === i && (
                           <div className="absolute top-0 left-full w-60 bg-[#d8c7a3] shadow-2xl z-[9999]">
-                            {subItem.sub.map((child, j) => (
-                              <div
-                                key={j}
-                                className="px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f] cursor-pointer"
-                              >
-                                {child.name}
-                              </div>
-                            ))}
+                            {subItem.sub.map((child, j) =>
+                              child.path ? (
+                                <Link
+                                  key={j}
+                                  to={child.path}
+                                  onClick={closeMenu}
+                                  className="block px-4 py-3 border-b border-[#cbb98f] hover:bg-[#cbb98f]"
+                                >
+                                  {child.name}
+                                </Link>
+                              ) : (
+                                <div
+                                  key={j}
+                                  className="px-4 py-3 border-b border-[#cbb98f]"
+                                >
+                                  {child.name}
+                                </div>
+                              )
+                            )}
                           </div>
                         )}
                       </div>
