@@ -1,30 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminLayout from "../../components/AdminLayout";
+import AxiosInstance from "../../axiosInstance";
 
 const WritersCorner = () => {
   const [search, setSearch] = useState("");
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Temporary blog data (Backend ready)
-  const blogs = [
-    {
-      id: 1,
-      title: "The Importance of Education in Modern Society",
-      date: "12/02/2025",
-      author: "Prof. Rahman",
-    },
-    {
-      id: 2,
-      title: "Digital Learning in Bangladesh",
-      date: "05/01/2025",
-      author: "Dr. Karim",
-    },
-    {
-      id: 3,
-      title: "Youth and Leadership Development",
-      date: "20/12/2024",
-      author: "Ms. Fatema",
-    },
-  ];
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await AxiosInstance.get("news/");
+        setBlogs(response.data);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   const filteredBlogs = blogs.filter((blog) =>
     blog.title.toLowerCase().includes(search.toLowerCase())
@@ -56,23 +52,46 @@ const WritersCorner = () => {
         </div>
 
         {/* Blog List */}
-        <div className="space-y-4">
-          {filteredBlogs.map((blog) => (
-            <div
-              key={blog.id}
-              className="border border-gray-200 p-4 hover:bg-gray-50 transition"
-            >
-              <h3 className="font-semibold text-gray-800 text-lg">
-                {blog.title}
-              </h3>
-
-              <div className="text-sm text-gray-500 mt-1">
-                {blog.date} | {blog.author}
-              </div>
+        <div className="space-y-6">
+          {loading ? (
+            <div className="text-center text-gray-500 py-6">
+              Loading...
             </div>
-          ))}
+          ) : filteredBlogs.length > 0 ? (
+            filteredBlogs.map((blog) => (
+              <div
+                key={blog.id}
+                className="border border-gray-200 p-4 hover:bg-gray-50 transition flex justify-between gap-6"
+              >
+                {/* LEFT SIDE - TEXT */}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-800 text-lg">
+                    {blog.title}
+                  </h3>
 
-          {filteredBlogs.length === 0 && (
+                  <div className="text-sm text-gray-500 mt-1">
+                    {new Date(blog.published_at).toLocaleDateString()} | {blog.author}
+                  </div>
+
+                  <p className="mt-3 text-gray-700 text-sm leading-relaxed">
+                    {blog.content}
+                  </p>
+                </div>
+
+                {/* RIGHT SIDE - IMAGE */}
+                {blog.image && (
+                  <div className="w-40 flex-shrink-0">
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="w-full h-28 object-cover rounded cursor-pointer hover:opacity-80 transition"
+                      onClick={() => window.open(blog.image, "_blank")}
+                    />
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
             <div className="text-center text-gray-500 py-6">
               No articles found.
             </div>

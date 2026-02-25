@@ -95,7 +95,7 @@ const Navbar = () => {
   name: "Notices",
   dropdown: [
     { name: "General Notice", path: "/notices/general" },
-    { name: "Office Orders", path: "/notices/office-orders" },
+    { name: "Office Orders", path: "/notices/office" },
   ],
 },
 

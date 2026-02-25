@@ -17,8 +17,7 @@ import Degree from "./pages/academic/Degree";
 import Honours from "./pages/academic/Honours";
 import Masters from "./pages/academic/Masters";
 import DepartmentPage from "./pages/departments/DepartmentPage";
-import GeneralNotice from "./pages/notices/GeneralNotice";
-import OfficeOrders from "./pages/notices/OfficeOrders";
+import NoticePage from "./pages/notices/NoticePage";
 import WritersCorner from "./pages/writers/WritersCorner";
 import ContactUs from "./pages/contact/ContactUs";
 
@@ -41,8 +40,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/academic/honours" element={<Honours />} />
         <Route path="/academic/masters" element={<Masters />} />
         <Route path="/departments/:group/:department" element={<DepartmentPage />} />
-        <Route path="/notices/general" element={<GeneralNotice />} />
-        <Route path="/notices/office-orders" element={<OfficeOrders />} />
+<Route path="/notices/:category" element={<NoticePage />} />
         <Route path="/writers-corner" element={<WritersCorner />} />.
         <Route path="/contact" element={<ContactUs />} />
         </Route>
